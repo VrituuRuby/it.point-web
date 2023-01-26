@@ -1,100 +1,69 @@
+import { api } from "@/lib/api";
+import { useEffect, useState } from "react";
 import {MdUnfoldMore} from "react-icons/md"
+import { Status } from "./Status";
 
 const columns = ['Nº', 'Estado', 'Ultima Ação', 'Data de Criação', 'Categoria', 'Título', 'Solicitante']
 
-const tickets = [
-    {
-        id: "123",
-        status: "Em aberto",
-        updated_at: new Date('2023-01-24'),
-        created_at: new Date('2023-01-20'),
-        category: "Softawre",
-        title: "Instalar Coisa",
-        caller: "Jonh Doe"
+export interface Ticket{
+    id: string,
+    status: 'PENDING' | 'OPEN' | 'IN_PROGRESS',
+    updated_at: string,
+    created_at: string,
+    category: {
+        name: string,
     },
-    {
-        id: "123",
-        status: "Em aberto",
-        updated_at: new Date('2023-01-24'),
-        created_at: new Date('2023-01-20'),
-        category: "Softawre",
-        title: "Instalar Coisa",
-        caller: "Jonh Doe"
-    },
-    {
-        id: "123",
-        status: "Em aberto",
-        updated_at: new Date('2023-01-24'),
-        created_at: new Date('2023-01-20'),
-        category: "Softawre",
-        title: "Instalar Coisa",
-        caller: "Jonh Doe"
-    },
-    {
-        id: "123",
-        status: "Em aberto",
-        updated_at: new Date('2023-01-24'),
-        created_at: new Date('2023-01-20'),
-        category: "Softawre",
-        title: "Instalar Coisa",
-        caller: "Jonh Doe"
-    },
-    {
-        id: "123",
-        status: "Em aberto",
-        updated_at: new Date('2023-01-24'),
-        created_at: new Date('2023-01-20'),
-        category: "Softawre",
-        title: "Instalar Coisa",
-        caller: "Jonh Doe"
-    },
-    {
-        id: "123",
-        status: "Em aberto",
-        updated_at: new Date('2023-01-24'),
-        created_at: new Date('2023-01-20'),
-        category: "Softawre",
-        title: "Instalar Coisa",
-        caller: "Jonh Doe"
-    },
-]
+    subcategory:{
+        name: string
+    }
+    title: string,
+    user: {
+        name: string
+    }
+}
 
-export function TicketsTable(){
-    return <div className="grid grid-cols-table bg-background-light text-base-dark text-base border-1 border-background-dark rounded-lg">
-        {columns.map(col => (
-            <div 
-                key={col}
-                className="flex flex-row items-center justify-between px-2 py-1.5 bg-background-dark text-base-dark font-bold ">
-                <span>{col}</span>
-                <MdUnfoldMore size={20} />
-            </div>
-        ))}
+interface TicketsTableProps{
+    tickets: Ticket[]
+}
 
-        {tickets.map(ticket => (
-            <>
-                <div className="p-4 flex items-center justify-center border-background-dark border-r-2 border-b-2">
-                    {ticket.id}
+export function TicketsTable({tickets}: TicketsTableProps){
+    return <div className="grid grid-cols-table text-base-dark border-background-dark rounded-lg overflow-hidden">
+        <div className="contents">
+            {columns.map(col => (
+                <div key={col} className="font-bold flex justify-between items-center px-2 py-1.5 first:rounded-tl-lg last:rounded-tr-lg bg-background-dark">
+                    {col}
+                    <MdUnfoldMore size={20} />
                 </div>
-                <div className="p-4 flex items-center justify-center border-background-dark border-r-2 border-b-2 font-bold">
-                    {ticket.status.toUpperCase()}
+            ))}
+        </div>
+      
+        {tickets.map(ticket => {
+            return (
+                <div className="contents" key={ticket.id}>
+                    <div className="p-4 flex justify-center bg-background-light border-background-dark border-b border-r">
+                        {ticket.id}
+                    </div>
+                    <div className="p-4 flex justify-center bg-background-light border-background-dark border-b border-r uppercase font-bold">
+                        <Status status={ticket.status}/>
+                    </div>
+                    <div className="p-4 flex justify-center bg-background-light border-background-dark border-b border-r">
+                        {ticket?.updated_at || '-'}
+                    </div>
+                    <div className="p-4 flex justify-center bg-background-light border-background-dark border-b border-r">
+                        {ticket.created_at}
+                    </div>
+                    <div className="p-4 flex flex-col justify-start bg-background-light border-background-dark border-b border-r">
+                        <span className="text-base-light text-sm">{ticket.category.name}</span>
+                        {ticket.subcategory.name}
+                    </div>
+                    <div className="p-4 flex justify-start bg-background-light border-background-dark border-b border-r">
+                        {ticket.title}
+                    </div>
+                    <div className="p-4 flex justify-start bg-background-light border-background-dark border-b border-r">
+                        {ticket.user.name}
+                    </div>
                 </div>
-                <div className="p-4 flex items-center justify-center border-background-dark border-r-2 border-b-2">
-                    {ticket.updated_at.toLocaleDateString()}
-                </div>
-                <div className="p-4 flex items-center justify-center border-background-dark border-r-2 border-b-2">
-                    {ticket.created_at.toLocaleDateString()}
-                </div>
-                <div className="p-4 flex items-center justify-start text-base-light border-r-2 border-b-2 border-background-dark">
-                    {ticket.category}
-                </div>
-                <div className="p-4 flex items-center justify-center border-background-dark border-r-2 border-b-2">
-                    {ticket.title}
-                </div>
-                <div className="p-4 flex items-center justify-center border-background-dark border-r-2 border-b-2">
-                    {ticket.caller}
-                </div>
-            </>
-        ))}
-
+            )
+        })}
     </div>
 }

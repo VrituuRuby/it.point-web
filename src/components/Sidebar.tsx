@@ -1,7 +1,12 @@
 import { RiDashboardFill } from "react-icons/ri";
 import { FaPlusCircle, FaTicketAlt } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { NavLink } from "./NavLink";
 export function Sidebar() {
+
+  const router = useRouter();
+
   return (
     <div className="flex flex-col bg-zinc-800 text-white text-base p-3 gap-2">
       <a
@@ -11,13 +16,10 @@ export function Sidebar() {
         <RiDashboardFill size="24" />
         <p>Dashboard</p>
       </a>
-      <Link
-        href="/fila"
-        className="flex flex-row gap-2 px-2 py-1 font-bold hover:bg-zinc-700 rounded-lg"
-      >
+      <NavLink to="/fila">
         <FaTicketAlt size="24" />
         <p>Fila</p>
-      </Link>
+      </NavLink>
       <a
         href="#novo"
         className="flex flex-row gap-2 px-2 py-1 font-bold hover:bg-zinc-700 rounded-lg"

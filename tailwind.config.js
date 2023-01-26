@@ -11,6 +11,9 @@ module.exports = {
         "background-light": "#E5EAF4",
         "background-dark": "#C6CDDB",
         "background-white": "#F9FBFF",
+        "yellow": "#FF9900",
+        "green": "#67A143",
+        "blue": "#769BFB"
       },
       gridTemplateColumns: {
         'table': 'auto auto auto auto 1fr 1fr 1fr' 
