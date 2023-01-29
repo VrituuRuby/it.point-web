@@ -1,0 +1,18 @@
+version: '3.9'
+
+networks:
+  it.point:
+    driver: bridge
+
+services:
+  main:
+    container_name: it.point-frontend
+    image: node:17.5.0-alpine
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    networks:
+      - it.point
