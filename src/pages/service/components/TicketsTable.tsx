@@ -1,5 +1,5 @@
 import { NavLink } from "@/components/NavLink";
-import { Ticket } from "@/services/tickets/getTickets";
+import { Ticket } from "@/services/getTickets";
 import { MdUnfoldMore } from "react-icons/md";
 import { Status } from "./Status";
 

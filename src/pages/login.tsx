@@ -1,7 +1,6 @@
-import { api } from "@/lib/api";
-import { useAuth } from "@/services/useAuth";
-import { Router, useRouter } from "next/router";
-import { ReactElement } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
+import { isAxiosError } from "axios";
+import { ReactElement, useContext, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NextPageWithLayout } from "./_app";
 
@@ -10,26 +9,20 @@ interface FormData {
   password: string;
 }
 
-interface ResponseData {
-  data: {
-    token: string;
-  };
-}
-
 const Home: NextPageWithLayout = () => {
   const { register, handleSubmit } = useForm<FormData>();
-  const router = useRouter();
-  const { login } = useAuth(false);
+  const { signIn } = useContext(AuthContext);
+
   async function onSubmit({ password, username }: FormData) {
     try {
-      const response: ResponseData = await api.post("/session", {
-        username,
-        password,
-      });
-      login(response.data.token);
-      router.push("/service");
-    } catch (err) {
-      console.log(err);
+      await signIn({ username, password });
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.status);
+        console.error(error.response);
+      } else {
+        console.log(error);
+      }
     }
   }
 
@@ -43,22 +36,22 @@ const Home: NextPageWithLayout = () => {
           <div className="grid-cols-login-form grid gap-2 text-base-dark text-right">
             <label
               htmlFor="username"
-              className="flex items-center justify-start"
+              className="flex items-center justify-start font-bold"
             >
               Usuário:
             </label>
             <input
               type="text"
-              className="px-2 py-1 bg-background-light rounded-lg text-base-dark"
+              className="px-2 py-1 bg-background-light rounded-lg text-base-light font-"
               {...register("username", { required: true, minLength: 3 })}
             />
 
-            <label htmlFor="password" className="flex items-center">
+            <label htmlFor="password" className="flex items-center font-bold">
               Senha:
             </label>
             <input
               type="password"
-              className="px-2 py-1 bg-background-light rounded-lg text-base-dark"
+              className="px-2 py-1 bg-background-light rounded-lg text-base-light font-normal"
               {...register("password", { required: true })}
             />
           </div>
