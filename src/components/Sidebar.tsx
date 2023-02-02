@@ -16,17 +16,16 @@ export function Sidebar() {
         <RiDashboardFill size="24" />
         <p>Dashboard</p>
       </a>
-      <NavLink to="/fila">
+      <NavLink to="/service">
         <FaTicketAlt size="24" />
         <p>Fila</p>
       </NavLink>
-      <a
-        href="#novo"
-        className="flex flex-row gap-2 px-2 py-1 font-bold hover:bg-zinc-700 rounded-lg"
+      <NavLink
+        to="/ticket/create"
       >
         <FaPlusCircle size="24" />
         <p>Novo Ticket</p>
-      </a>
+      </NavLink>
     </div>
   );
 }
