@@ -2,6 +2,7 @@ version: '3.9'
 
 networks:
   it.point:
+    name: it.point
     driver: bridge
 
 services:
