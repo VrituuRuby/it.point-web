@@ -8,12 +8,25 @@ import { TicketsTable } from "./components/TicketsTable";
 import { NextPageWithLayout } from "../_app";
 import { parseCookies } from "nookies";
 
-import { getAPIClient } from "@/services/axios";
-import { Ticket } from "@/services/getTickets";
+import { getTickets, Ticket } from "@/services/getTickets";
 import axios from "axios";
+import { getAPIClient } from "@/services/axios";
+
+interface FilaProps {
+  tickets: Ticket[];
+}
 
 const Fila: NextPageWithLayout = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
+
+  useEffect(() => {
+    async function getTicketsData() {
+      const tickets = await getTickets();
+      setTickets(tickets);
+    }
+
+    getTicketsData();
+  }, []);
 
   return (
     <div className="flex flex-col flex-1 p-4 gap-4">
@@ -61,13 +74,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const res = await api.get("http://localhost:3333/api/tickets", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  const response = await api.get("http://it.point-backend:3333/api/user", {
+    headers: { Authorization: `Bearer ${token}` },
   });
 
-  console.log(res.data);
+  console.log(response.data);
+
+  const isService = response.data.role === "SERVICE";
+
+  if (!isService) {
+    return {
+      redirect: {
+        destination: "/userArea",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {},

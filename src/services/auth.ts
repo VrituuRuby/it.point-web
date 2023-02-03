@@ -20,6 +20,9 @@ interface ResponseData {
 interface UserData {
   name: string;
   branch_id: string;
+  branch?: {
+    name: string;
+  };
   role: "SERVICE" | "ADMIN" | "USER";
   email: string;
   username: string;

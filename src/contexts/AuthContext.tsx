@@ -23,6 +23,9 @@ interface UserData {
   role: "SERVICE" | "ADMIN" | "USER";
   email: string;
   username: string;
+  branch?: {
+    name: string;
+  };
 }
 
 interface AuthContextType {
