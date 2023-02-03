@@ -47,7 +47,7 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
             <div className="p-4 flex justify-center items-center bg-background-light border-background-dark border-b border-r">
               {new Date(ticket.created_at).toLocaleDateString()}
             </div>
-            <div className="p-4 flex flex-col justify-start bg-background-light border-background-dark border-b border-r">
+            <div className="p-4 flex flex-col justify-center bg-background-light border-background-dark border-b border-r">
               <span className="text-base-light text-sm">
                 {ticket.category.name}
               </span>
