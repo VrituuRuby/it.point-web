@@ -27,7 +27,7 @@ export function SelectInput({
     <label className="flex flex-col flex-1 text-base font-bold text-base-dark leading-tight">
       {display}:
       <select
-        className="px-2 py-1 rounded-sm appearance-none bg-background-white"
+        className="px-2 py-1 rounded-sm appearance-none bg-white border border-background-dark text-base-light"
         defaultValue={""}
         {...register}
         onChange={

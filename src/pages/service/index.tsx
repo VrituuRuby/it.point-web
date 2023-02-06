@@ -63,7 +63,7 @@ export default Fila;
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { ["@it.point-token"]: token } = parseCookies(ctx);
 
-  const api = axios.create();
+  const api = getAPIClient(ctx);
 
   if (!token) {
     return {
@@ -74,15 +74,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const response = await api.get("http://it.point-backend:3333/api/user", {
+  const response = await api.get("/user", {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  console.log(response.data);
+  const isAllowed =
+    response.data.role === "SERVICE" || response.data.role === "ADMIN";
 
-  const isService = response.data.role === "SERVICE";
-
-  if (!isService) {
+  if (!isAllowed) {
     return {
       redirect: {
         destination: "/userArea",

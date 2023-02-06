@@ -1,13 +1,22 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import { parseCookies } from "nookies";
 
 export function getAPIClient(ctx?: any) {
   const { "@it.point-token": token } = parseCookies(ctx);
 
-  const api = axios.create({
-    baseURL: "http://localhost:3333/api",
-    timeout: 1000,
-  });
+  let api: AxiosInstance;
+
+  if (ctx) {
+    api = axios.create({
+      baseURL: "http://it.point-backend:3333/api",
+      timeout: 1000,
+    });
+  } else {
+    api = axios.create({
+      baseURL: "http://localhost:3333/api",
+      timeout: 1000,
+    });
+  }
 
   if (token) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
