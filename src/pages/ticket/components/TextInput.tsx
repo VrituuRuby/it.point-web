@@ -5,12 +5,14 @@ interface TextInputProps {
   type?: "text" | "textarea";
   register: UseFormRegisterReturn;
   defaultValue?: string;
+  onChange?: (...args: any) => any;
 }
 
 export function TextInput({
   display,
   register,
   defaultValue,
+  onChange,
   type = "text",
 }: TextInputProps) {
   return (
@@ -22,6 +24,7 @@ export function TextInput({
           defaultValue={defaultValue}
           className="px-2 py-1 rounded-sm border-background-dark border font-normal text-base-light"
           {...register}
+          onChange={onChange}
         />
       ) : (
         <textarea

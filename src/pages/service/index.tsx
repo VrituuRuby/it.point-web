@@ -1,15 +1,14 @@
 import { ReactElement, useContext, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import { parseCookies } from "nookies";
 
 import Layout from "@/Layouts/ServiceLayout";
 import { TicketsTable } from "./components/TicketsTable";
 
 import { NextPageWithLayout } from "../_app";
-import { parseCookies } from "nookies";
 
 import { getTickets, Ticket } from "@/services/getTickets";
-import axios from "axios";
 import { getAPIClient } from "@/services/axios";
 
 interface FilaProps {
@@ -74,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const response = await api.get("/user", {
+  const response = await api.get("/users", {
     headers: { Authorization: `Bearer ${token}` },
   });
 

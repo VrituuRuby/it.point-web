@@ -9,6 +9,7 @@ import {
 
 interface SelectInputProps {
   display: string;
+  defaultValue: string;
   register: UseFormRegisterReturn;
   onChange?: (value: string) => void;
   options: {
@@ -20,6 +21,7 @@ interface SelectInputProps {
 export function SelectInput({
   display,
   options,
+  defaultValue,
   register,
   onChange,
 }: SelectInputProps) {
@@ -28,7 +30,7 @@ export function SelectInput({
       {display}:
       <select
         className="px-2 py-1 rounded-sm appearance-none bg-white border border-background-dark text-base-light"
-        defaultValue={""}
+        defaultValue={defaultValue}
         {...register}
         onChange={
           onChange

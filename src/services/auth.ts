@@ -38,14 +38,14 @@ export async function signInRequest({ username, password }: SignInRequestData) {
 }
 
 export async function recoverUser(token: string) {
-  const response = await api.get("/user", {
+  const response = await api.get("/users", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response;
 }
 
 export async function isService(token: string) {
-  const response = await api.get("/user", {
+  const response = await api.get("/users", {
     headers: { Authorization: `Bearer ${token}` },
   });
 
