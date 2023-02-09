@@ -1,28 +1,22 @@
-import { ChangeEvent } from "react";
-import {
-  RegisterOptions,
-  useForm,
-  useFormContext,
-  UseFormRegister,
-  UseFormRegisterReturn,
-} from "react-hook-form";
+import { ChangeEvent, useState } from "react";
+import { Control, UseFormRegisterReturn, useWatch } from "react-hook-form";
 
 interface SelectInputProps {
   display: string;
-  defaultValue: string;
-  register: UseFormRegisterReturn;
-  onChange?: (value: string) => void;
+  value?: string;
+  name: string;
   options: {
     name: string;
     id: string;
   }[];
+  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export function SelectInput({
   display,
   options,
-  defaultValue,
-  register,
+  value = "",
+  name,
   onChange,
 }: SelectInputProps) {
   return (
@@ -30,13 +24,9 @@ export function SelectInput({
       {display}:
       <select
         className="px-2 py-1 rounded-sm appearance-none bg-white border border-background-dark text-base-light"
-        defaultValue={defaultValue}
-        {...register}
-        onChange={
-          onChange
-            ? (e) => onChange(e.target.value)
-            : (e) => console.log(e.target.value)
-        }
+        defaultValue={value}
+        name={name}
+        onChange={onChange}
       >
         <option value="" disabled hidden>
           Selecione

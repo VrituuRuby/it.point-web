@@ -1,4 +1,10 @@
-import React, { ChangeEvent, ReactElement, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  ReactElement,
+  useEffect,
+  useState,
+} from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 
@@ -13,8 +19,11 @@ import { getAPIClient } from "@/services/axios";
 import { SearchInput } from "./components/SearchInput";
 import { SelectInput } from "./components/SelectInput";
 import { TextInput } from "./components/TextInput";
+import useDebounce from "@/hooks/useDebounce";
+import { api } from "@/services/api";
 
 export interface FormData {
+  user_id: string;
   user: string;
   email: string;
   branch: string;
@@ -29,7 +38,7 @@ interface UserResponseData {
   name: string;
   id: string;
   email: string;
-  branch: Branch;
+  branch?: Branch;
 }
 
 interface Branch {
@@ -57,28 +66,42 @@ export const CreateTicket: NextPageWithLayout<Props> = ({
   possibleCategories,
   possibleBranches,
 }) => {
-  const [categories, setCategories] = useState<Category[]>(possibleCategories);
   const [subCategories, setSubcategories] = useState<Subcategory[]>([]);
+  const debouncedUser = useDebounce((value) => getUser(value), 500);
+  const [possibleUsers, setPossibleUsers] = useState<UserResponseData[]>([]);
+  const [selectedUser, setSelectedUser] = useState<
+    UserResponseData | undefined
+  >({} as UserResponseData);
+  const [email, setEmail] = useState("");
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubcategory] = useState("");
 
-  const [user, setUser] = useState<UserResponseData | null>(null);
+  async function getUser(name: string) {
+    const response = await api.get("/users/search", { params: { name } });
+    setPossibleUsers(response.data);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
-
-  function onChangeCategory(value: string) {
-    const index = categories.findIndex((category) => category.id === value);
-    const subCategories = categories[index].subcategories;
-    setSubcategories(subCategories);
+    if (possibleUsers.length === 1) {
+      setSelectedUser(possibleUsers[0]);
+    }
   }
 
-  function onSubmit(data: FormData) {
-    console.log(data);
+  function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    console.log(email, category, subCategory, selectedUser);
   }
 
-  function handleNameChange(event: ChangeEvent<HTMLInputElement>) {}
+  function handleUsernameChange(event: ChangeEvent<HTMLInputElement>) {
+    debouncedUser(event.target.value);
+  }
+
+  function handleChangeCategory(event: ChangeEvent<HTMLSelectElement>) {
+    const category_id = event.target.value;
+    const selectedCategory = possibleCategories.find(
+      (category) => category.id === category_id
+    );
+
+    setSubcategories(selectedCategory?.subcategories || []);
+  }
 
   return (
     <div className="p-4 flex flex-col flex-1 gap-2">
@@ -87,67 +110,52 @@ export const CreateTicket: NextPageWithLayout<Props> = ({
       </Head>
       <h2 className="text-3xl font-bold text-base-dark">Novo Ticket</h2>
       <form
-        onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}
+        onSubmit={onSubmit}
         className="p-4 bg-background-light rounded-lg flex flex-col gap-2 justify-between"
       >
         <div className="flex flex-row gap-4 justify-between">
           <SearchInput
-            setUser={setUser}
             display="Solicitante"
-            defaultValue={user?.name}
-            register={register("user", { required: true })}
+            name="user"
+            datalist={possibleUsers}
+            onChange={handleUsernameChange}
+            onBlur={handleUsernameChange}
           />
-          <SelectInput
-            display="Nova Unidade"
-            defaultValue={user ? user.branch.id : ""}
-            options={possibleBranches}
-            register={register("branch", { required: true })}
-          />
-          {/* <TextInput
+          <TextInput
+            name="branch"
             display="Unidade"
-            defaultValue={user?.branch.name}
-            register={register("branch", {
-              required: true,
-            })}
-          /> */}
+            value={selectedUser?.branch?.name}
+          />
         </div>
         <div className="flex flex-row gap-4 justify-between">
-          <TextInput display="Telefone" register={register("phone")} />
+          <TextInput name="phone" display="Telefone" />
           <TextInput
+            name="email"
             display="Email"
-            defaultValue={user?.email}
-            register={register("email", { required: true })}
+            value={selectedUser?.email}
+            onChange={(event) => setEmail(event.target.value)}
           />
         </div>
         <div className="flex flex-row gap-4 justify-between">
           <SelectInput
             display="Categoria"
-            defaultValue=""
-            options={categories}
-            register={register("category", { required: true })}
-            onChange={onChangeCategory}
+            options={possibleCategories}
+            name="category"
+            onChange={handleChangeCategory}
           />
           <SelectInput
             display="Subcategoria"
-            defaultValue=""
-            register={register("subcategory", { required: true })}
             options={subCategories}
+            name="subcategory"
           />
         </div>
 
         <div>
-          <TextInput
-            display="Título"
-            register={register("title", { required: true })}
-          />
+          <TextInput name="title" display="Título" />
         </div>
 
         <div>
-          <TextInput
-            display="Descrição"
-            type="textarea"
-            register={register("description", { required: true })}
-          />
+          <TextInput name="description" display="Descrição" type="textarea" />
         </div>
         <div className="flex justify-center">
           <button
@@ -156,8 +164,6 @@ export const CreateTicket: NextPageWithLayout<Props> = ({
           >
             Criar
           </button>
-
-          {errors.branch && <p>{errors.branch.message}</p>}
         </div>
       </form>
     </div>
