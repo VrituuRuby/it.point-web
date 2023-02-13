@@ -1,5 +1,6 @@
 import { NavLink } from "@/components/NavLink";
 import { Ticket } from "@/services/getTickets";
+import dayjs from "dayjs";
 import { MdUnfoldMore } from "react-icons/md";
 import { Status } from "./Status";
 
@@ -41,11 +42,23 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
             <div className="p-4 flex justify-center items-center bg-background-light border-background-dark border-b border-r uppercase font-bold">
               <Status status={ticket.status} />
             </div>
-            <div className="p-4 flex justify-center items-center bg-background-light border-background-dark border-b border-r">
-              {ticket?.updated_at || "-"}
+            <div className="p-4 flex flex-col justify-center items-center bg-background-light border-background-dark border-b border-r">
+              {ticket?.updated_at ? (
+                <>
+                  <span>
+                    {dayjs(ticket.updated_at).format("DD/MM/YY").toString()}
+                  </span>
+                  <span>
+                    {dayjs(ticket.updated_at).format("HH:mm").toString()}
+                  </span>
+                </>
+              ) : (
+                "-"
+              )}
             </div>
-            <div className="p-4 flex justify-center items-center bg-background-light border-background-dark border-b border-r">
-              {new Date(ticket.created_at).toLocaleDateString()}
+            <div className="p-4 flex flex-col justify-center items-center bg-background-light border-background-dark border-b border-r">
+              <span>{dayjs(ticket?.created_at).format("DD/MM/YY")}</span>
+              <span>{dayjs(ticket?.created_at).format("HH:mm")}</span>
             </div>
             <div className="p-4 flex flex-col justify-center bg-background-light border-background-dark border-b border-r">
               <span className="text-base-light text-sm">
