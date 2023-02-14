@@ -12,6 +12,7 @@
     "@next/font": "13.1.5",
     "axios": "^1.2.5",
     "dayjs": "^1.11.7",
+    "framer-motion": "^9.0.2",
     "next": "13.1.5",
     "nookies": "^2.5.2",
     "phosphor-react": "^1.4.1",

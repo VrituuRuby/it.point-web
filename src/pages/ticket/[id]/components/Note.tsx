@@ -1,6 +1,8 @@
+import { AuthContext } from "@/contexts/AuthContext";
 import { spawn } from "child_process";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { motion } from "framer-motion";
 
 dayjs.extend(utc);
 
@@ -49,7 +51,12 @@ export function Note({ noteData }: NoteProps) {
     .toString();
 
   return (
-    <div className={handlePublicStatus(noteData.isPublic)}>
+    <motion.div
+      initial={{ scaleY: 0, opacity: 0, display: "hidden" }}
+      animate={{ scaleY: 1, opacity: 1, display: "flex" }}
+      transition={{ ease: "easeInOut", delay: 0.2 }}
+      className={handlePublicStatus(noteData.isPublic)}
+    >
       <h2 className="text-xl text-base-dark font-bold">
         {noteData.user.name} - {handleStatus(noteData.status)}
       </h2>
@@ -60,6 +67,6 @@ export function Note({ noteData }: NoteProps) {
       <span className="text-base-light text-sm text-right">
         Ação realizada em em {createdAtDate}
       </span>
-    </div>
+    </motion.div>
   );
 }

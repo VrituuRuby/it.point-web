@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { AxiosResponse } from "axios";
 import { NextPageWithLayout } from "../../_app";
@@ -34,19 +34,7 @@ interface Props {
       name: string;
       id: string;
     };
-    notes: {
-      id: string;
-      user_id: string;
-      status: "OPEN" | "PENDING" | "IN_PROGRESS" | "CLOSED";
-      description: string;
-      isPublic: boolean;
-      created_at: string;
-      ticket_id: number;
-      user: {
-        id: string;
-        name: string;
-      };
-    }[];
+    notes: note[];
     title: string;
     description: string;
     phone: string;
@@ -54,6 +42,20 @@ interface Props {
     subcategory_id: string;
     created_at: string;
     updated_at: string;
+  };
+}
+
+interface note {
+  id: string;
+  user_id: string;
+  status: "OPEN" | "PENDING" | "IN_PROGRESS" | "CLOSED";
+  description: string;
+  isPublic: boolean;
+  created_at: string;
+  ticket_id: number;
+  user: {
+    id: string;
+    name: string;
   };
 }
 
@@ -74,6 +76,19 @@ function StatusStyleHandler(
 
 const Ticket: NextPageWithLayout<Props> = ({ ticketData }) => {
   const [isAddingNote, setIsAddingNote] = useState(false);
+  const [notes, setNotes] = useState<note[]>([]);
+
+  useEffect(() => {
+    setNotes(ticketData?.notes);
+  });
+
+  function updateNotes(note: note) {
+    const newNotes = notes;
+    newNotes.unshift(note);
+    setNotes(newNotes);
+
+    setIsAddingNote(false);
+  }
 
   function toggleAddNote() {
     isAddingNote ? setIsAddingNote(false) : setIsAddingNote(true);
@@ -82,14 +97,18 @@ const Ticket: NextPageWithLayout<Props> = ({ ticketData }) => {
   return (
     <div className="flex flex-col w-full p-4 gap-2">
       <div className="flex justify-between items-center font-bold text-4xl text-base-dark">
-        <h2>TICKET {ticketData.id}</h2>
-        {StatusStyleHandler(ticketData.status)}
+        <h2>TICKET {ticketData?.id}</h2>
+        {StatusStyleHandler(ticketData?.status)}
       </div>
-      <div className="flex-1 flex flex-col gap-2 text-base-dark">
+      <div className="flex-1 flex flex-col gap-4 text-base-dark">
         <Information ticketData={ticketData} toggleAddNote={toggleAddNote} />
-        {isAddingNote ? <AddNote /> : ""}
-        {ticketData.notes.map((note) => (
-          <Note key={note.id} noteData={note} />
+        <AddNote
+          ticket_id={ticketData?.id}
+          updateNotes={updateNotes}
+          display={isAddingNote}
+        />
+        {notes?.map((note) => (
+          <Note key={note?.id} noteData={note} />
         ))}
       </div>
     </div>
