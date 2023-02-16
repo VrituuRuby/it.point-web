@@ -78,15 +78,18 @@ const Ticket: NextPageWithLayout<Props> = ({ ticketData }) => {
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [notes, setNotes] = useState<note[]>([]);
 
+  const [status, setStatus] = useState(ticketData?.status);
+
   useEffect(() => {
     setNotes(ticketData?.notes);
-  });
+  }, [ticketData.notes]);
 
   function updateNotes(note: note) {
     const newNotes = notes;
     newNotes.unshift(note);
     setNotes(newNotes);
 
+    setStatus(note.status);
     setIsAddingNote(false);
   }
 
@@ -95,10 +98,10 @@ const Ticket: NextPageWithLayout<Props> = ({ ticketData }) => {
   }
 
   return (
-    <div className="flex flex-col w-full p-4 gap-2">
+    <div className="flex flex-col flex-1 w-full p-4 gap-2">
       <div className="flex justify-between items-center font-bold text-4xl text-base-dark">
         <h2>TICKET {ticketData?.id}</h2>
-        {StatusStyleHandler(ticketData?.status)}
+        {StatusStyleHandler(status)}
       </div>
       <div className="flex-1 flex flex-col gap-4 text-base-dark">
         <Information ticketData={ticketData} toggleAddNote={toggleAddNote} />

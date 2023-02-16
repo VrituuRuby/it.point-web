@@ -8,7 +8,7 @@ import React, {
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 
-import { useForm } from "react-hook-form";
+import { SubmitErrorHandler, useForm } from "react-hook-form";
 import { parseCookies } from "nookies";
 
 import { NextPageWithLayout } from "../_app";
@@ -21,6 +21,7 @@ import { SelectInput } from "./components/SelectInput";
 import { TextInput } from "./components/TextInput";
 import useDebounce from "@/hooks/useDebounce";
 import { api } from "@/services/api";
+import { useRouter } from "next/router";
 
 export interface FormData {
   user_id: string;
@@ -66,32 +67,63 @@ export const CreateTicket: NextPageWithLayout<Props> = ({
   possibleCategories,
   possibleBranches,
 }) => {
+  const router = useRouter();
   const [subCategories, setSubcategories] = useState<Subcategory[]>([]);
-  const debouncedUser = useDebounce((value) => getUser(value), 500);
+  const { register, handleSubmit, watch, setValue } = useForm<FormData>({
+    defaultValues: { user: "" },
+  });
+  const debouncedUser = useDebounce((value) => getUsers(value), 500);
   const [possibleUsers, setPossibleUsers] = useState<UserResponseData[]>([]);
-  const [selectedUser, setSelectedUser] = useState<
-    UserResponseData | undefined
-  >({} as UserResponseData);
-  const [email, setEmail] = useState("");
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubcategory] = useState("");
+  const [selectedUser, setSelectedUser] = useState<UserResponseData>(
+    {} as UserResponseData
+  );
 
-  async function getUser(name: string) {
+  async function getUsers(name: string) {
     const response = await api.get("/users/search", { params: { name } });
     setPossibleUsers(response.data);
-
-    if (possibleUsers.length === 1) {
-      setSelectedUser(possibleUsers[0]);
-    }
   }
 
-  function onSubmit(event: FormEvent) {
-    event.preventDefault();
-    console.log(email, category, subCategory, selectedUser);
+  async function selectUser(name: string) {
+    const response = await api.get("/users/search", { params: { name } });
+    const user = response.data[0];
+    setValue("user", user.name);
+    setValue("email", user.email);
+    setValue("user_id", user.id);
+    setValue("branch", user?.branch.id);
   }
 
-  function handleUsernameChange(event: ChangeEvent<HTMLInputElement>) {
-    debouncedUser(event.target.value);
+  const user = watch("user");
+
+  useEffect(() => {
+    handleUsernameChange(user);
+  }, [user]);
+
+  function handleUsernameChange(name: string) {
+    debouncedUser(name);
+  }
+
+  async function onSubmit({
+    branch,
+    category,
+    description,
+    email,
+    subcategory,
+    title,
+    user_id,
+    phone,
+  }: FormData) {
+    const response = await api.post("/tickets/create", {
+      category_id: category,
+      description,
+      branch_id: branch,
+      email,
+      subcategory_id: subcategory,
+      title,
+      user_id,
+      phone,
+    });
+
+    router.push(`/ticket/${response.data.id}`)
   }
 
   function handleChangeCategory(event: ChangeEvent<HTMLSelectElement>) {
@@ -110,52 +142,60 @@ export const CreateTicket: NextPageWithLayout<Props> = ({
       </Head>
       <h2 className="text-3xl font-bold text-base-dark">Novo Ticket</h2>
       <form
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="p-4 bg-background-light rounded-lg flex flex-col gap-2 justify-between"
       >
         <div className="flex flex-row gap-4 justify-between">
           <SearchInput
             display="Solicitante"
-            name="user"
             datalist={possibleUsers}
-            onChange={handleUsernameChange}
-            onBlur={handleUsernameChange}
+            register={register("user", { required: true })}
+            selectUser={selectUser}
           />
-          <TextInput
-            name="branch"
+          <SelectInput
             display="Unidade"
-            value={selectedUser?.branch?.name}
+            options={possibleBranches}
+            value={selectedUser?.branch?.id}
+            register={register("branch", { required: true })}
           />
         </div>
         <div className="flex flex-row gap-4 justify-between">
-          <TextInput name="phone" display="Telefone" />
           <TextInput
-            name="email"
+            display="Telefone"
+            register={register("phone", { required: true })}
+          />
+          <TextInput
             display="Email"
-            value={selectedUser?.email}
-            onChange={(event) => setEmail(event.target.value)}
+            register={register("email", { required: true })}
           />
         </div>
         <div className="flex flex-row gap-4 justify-between">
           <SelectInput
             display="Categoria"
+            register={register("category", { required: true })}
             options={possibleCategories}
-            name="category"
             onChange={handleChangeCategory}
           />
           <SelectInput
             display="Subcategoria"
             options={subCategories}
-            name="subcategory"
+            register={register("subcategory", { required: true })}
           />
         </div>
 
         <div>
-          <TextInput name="title" display="Título" />
+          <TextInput
+            display="Título"
+            register={register("title", { required: true })}
+          />
         </div>
 
         <div>
-          <TextInput name="description" display="Descrição" type="textarea" />
+          <TextInput
+            register={register("description", { required: true })}
+            display="Descrição"
+            type="textarea"
+          />
         </div>
         <div className="flex justify-center">
           <button

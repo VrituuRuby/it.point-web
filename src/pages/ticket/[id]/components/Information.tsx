@@ -64,7 +64,7 @@ export function Information({ ticketData, toggleAddNote }: TicketDataProps) {
           Criado em {createdAtDate}
         </span>
       </div>
-      <p className="text-base-light flex flex-col">
+      <p className="text-base-light flex flex-col whitespace-pre-wrap">
         <span>
           <b>Usuário solicitante:</b> {ticketData?.user?.name}
         </span>
@@ -77,13 +77,13 @@ export function Information({ ticketData, toggleAddNote }: TicketDataProps) {
         <span>
           <b>Sub-Categoria:</b> {ticketData?.subcategory?.name}
         </span>
-        <span>
+        <span className="whitespace-pre-wrap">
           <b>Descrição: </b>
           {ticketData?.description}
         </span>
       </p>
 
-      <div className="bg-background-dark rounded-lg flex flex-row gap-1 p-1 font-bold">
+      <div className="flex flex-row gap-1 font-bold">
         <button
           className="flex flex-row gap-2 py-1 items-center justify-center flex-1 bg-blue text-white px-2 rounded-md hover:brightness-110 transition-all"
           onClick={toggleAddNote}

@@ -42,17 +42,17 @@ export function AddNote({ ticket_id, updateNotes, display }: AddNoteProps) {
   }
 
   const transitionList = {
-    hidden: { height: 0, opacity: 0, display: "hidden", padding: 0 },
+    hidden: { height: 0, opacity: 0, display: "none", padding: "16 0" },
     visible: { height: "auto", opacity: 1, display: "flex" },
   };
 
   return (
     <motion.div
       className="bg-background-blue rounded-lg p-4 w-full flex flex-col justify-between gap-2 overflow-hidden"
-      initial={{ height: 0, opacity: 0, display: "hidden" }}
+      initial={{ height: 0, opacity: 0, display: "none" }}
       animate={display ? "visible" : "hidden"}
       variants={transitionList}
-      transition={{ ease: "easeInOut", duration: 0.2 }}
+      transition={{ ease: "easeOut", duration: 0.2 }}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
         <h2 className="text-xl text-base-dark font-bold">Atendendo</h2>
@@ -69,7 +69,7 @@ export function AddNote({ ticket_id, updateNotes, display }: AddNoteProps) {
           <option value="CLOSED">CONCLUÍDO</option>
         </select>
         <textarea
-          className="w-full rounded-lg border border-background-light p-2 text-base-light"
+          className="w-full rounded-lg border border-background-light p-2 text-base-light min-h-[200px]"
           {...register("description", { required: true })}
         ></textarea>
         <div className="flex justify-start gap-4">
@@ -82,7 +82,7 @@ export function AddNote({ ticket_id, updateNotes, display }: AddNoteProps) {
             Enviar e-mail
           </label>
         </div>
-        <div className="bg-background-dark rounded-lg flex flex-row gap-1 p-1 font-bold">
+        <div className="flex flex-row gap-1 font-bold">
           <button
             type="submit"
             className="flex flex-row gap-2 py-1 items-center justify-center flex-1 bg-blue text-white px-2 rounded-md"

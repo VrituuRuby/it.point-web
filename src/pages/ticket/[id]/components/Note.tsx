@@ -63,7 +63,9 @@ export function Note({ noteData }: NoteProps) {
       <span className="text-base-light text-sm">
         {noteData.isPublic ? "Público" : "Privado"}
       </span>
-      <p className="text-base-light flex flex-col">{noteData.description}</p>
+      <p className="text-base-light flex flex-col whitespace-pre-wrap">
+        {noteData.description}
+      </p>
       <span className="text-base-light text-sm text-right">
         Ação realizada em em {createdAtDate}
       </span>
