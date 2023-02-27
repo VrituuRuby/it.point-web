@@ -11,6 +11,7 @@ import utc from "dayjs/plugin/utc";
 import { Note } from "./components/Note";
 import { Information } from "./components/Information";
 import { AddNote } from "./components/AddNote";
+import Head from "next/head";
 
 dayjs.extend(utc);
 interface Props {
@@ -99,6 +100,9 @@ const Ticket: NextPageWithLayout<Props> = ({ ticketData }) => {
 
   return (
     <div className="flex flex-col flex-1 w-full p-4 gap-2">
+      <Head>
+        <title>TICKET {ticketData.id} | it.point</title>
+      </Head>
       <div className="flex justify-between items-center font-bold text-4xl text-base-dark">
         <h2>TICKET {ticketData?.id}</h2>
         {StatusStyleHandler(status)}

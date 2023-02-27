@@ -1,6 +1,6 @@
-import { NavLink } from "@/components/NavLink";
 import { Ticket } from "@/services/getTickets";
 import dayjs from "dayjs";
+import Link from "next/link";
 import { MdUnfoldMore } from "react-icons/md";
 import { Status } from "./Status";
 
@@ -20,12 +20,12 @@ interface TicketsTableProps {
 
 export function TicketsTable({ tickets }: TicketsTableProps) {
   return (
-    <div className="grid grid-cols-ticket-table text-base-dark border-background-dark rounded-lg overflow-hidden">
+    <div className="grid grid-cols-ticket-table text-base-dark border border-background-dark rounded-lg overflow-hidden">
       <div className="contents">
         {columns.map((col) => (
           <div
             key={col}
-            className="font-bold flex justify-between items-center px-2 py-1.5 first:rounded-tl-lg last:rounded-tr-lg bg-background-dark"
+            className="font-bold flex justify-between items-center px-2 py-1.5 bg-background-dark border-r border-gray-400 last:border-r-0"
           >
             {col}
             <MdUnfoldMore size={20} />
@@ -35,14 +35,18 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
 
       {tickets.map((ticket) => {
         return (
-          <div className="contents" key={ticket.id}>
-            <div className="p-4 flex justify-center items-center bg-background-light border-background-dark border-b border-r">
-              <NavLink to={`/ticket/${ticket.id}`}>{ticket.id}</NavLink>
+          <Link
+            className="contents"
+            key={ticket.id}
+            href={`/ticket/${ticket.id}`}
+          >
+            <div className="px-4 py-2 flex justify-center items-center bg-background-light border-background-dark border-b border-r">
+              {ticket.id}
             </div>
-            <div className="p-4 flex justify-center items-center bg-background-light border-background-dark border-b border-r uppercase font-bold">
+            <div className="px-4 py-2 flex justify-center items-center bg-background-light border-background-dark border-b border-r uppercase font-bold">
               <Status status={ticket.status} />
             </div>
-            <div className="p-4 flex flex-col justify-center items-center bg-background-light border-background-dark border-b border-r">
+            <div className="px-4 py-2 flex flex-col justify-center items-center bg-background-light border-background-dark border-b border-r">
               {ticket?.updated_at ? (
                 <>
                   <span>
@@ -56,23 +60,23 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                 "-"
               )}
             </div>
-            <div className="p-4 flex flex-col justify-center items-center bg-background-light border-background-dark border-b border-r">
+            <div className="px-4 py-2 flex flex-col justify-center items-center bg-background-light border-background-dark border-b border-r">
               <span>{dayjs(ticket?.created_at).format("DD/MM/YY")}</span>
               <span>{dayjs(ticket?.created_at).format("HH:mm")}</span>
             </div>
-            <div className="p-4 flex flex-col justify-center bg-background-light border-background-dark border-b border-r">
+            <div className="px-4 py-2 flex flex-col justify-center bg-background-light border-background-dark border-b border-r">
               <span className="text-base-light text-sm">
                 {ticket.category.name}
               </span>
               {ticket.subcategory.name}
             </div>
-            <div className="p-4 flex justify-start items-center bg-background-light border-background-dark border-b border-r">
+            <div className="px-4 py-2 flex justify-start items-center bg-background-light border-background-dark border-b border-r">
               {ticket.title}
             </div>
-            <div className="p-4 flex justify-start text-base-light items-center bg-background-light border-background-dark border-b border-r">
+            <div className="px-4 py-2 flex justify-start text-base-light items-center bg-background-light border-background-dark border-b">
               {ticket.user.name}
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

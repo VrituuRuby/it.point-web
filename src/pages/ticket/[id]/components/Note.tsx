@@ -46,7 +46,7 @@ function handlePublicStatus(isPublic: boolean) {
 
 export function Note({ noteData }: NoteProps) {
   const createdAtDate = dayjs(noteData.created_at)
-    .utc()
+    .utcOffset(-3)
     .format("DD/MM/YYYY - HH:mm")
     .toString();
 

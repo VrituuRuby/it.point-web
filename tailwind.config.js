@@ -18,7 +18,7 @@ module.exports = {
         blue: "#769BFB",
       },
       gridTemplateColumns: {
-        "ticket-table": "auto auto auto auto 1fr 1fr 1fr",
+        "ticket-table": "auto auto auto auto auto 1fr 1fr",
         "login-form": "auto 1fr",
       },
     },
