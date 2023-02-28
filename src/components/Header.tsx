@@ -20,8 +20,8 @@ export function Header() {
         />
       </div>
       <div className="flex flex-col">
-        <p>{user?.name}</p>
-        <span>{user?.role}</span>
+        <p>{user?.name ?? "Nome"}</p>
+        <span>{user?.role ?? "Função"}</span>
       </div>
     </header>
   );

@@ -10,6 +10,7 @@ import { NextPageWithLayout } from "../_app";
 
 import { getTickets, Ticket } from "@/services/getTickets";
 import { getAPIClient } from "@/services/axios";
+import { isErrored } from "stream";
 
 interface FilaProps {
   tickets: Ticket[];
@@ -60,9 +61,9 @@ Fila.getLayout = function getLayout(page: ReactElement) {
 export default Fila;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { ["@it.point-token"]: token } = parseCookies(ctx);
-
-  const api = getAPIClient(ctx);
+  const { ["@it.point-token"]: token, ["@it.point-user"]: userAsJson } =
+    parseCookies(ctx);
+  const user = JSON.parse(userAsJson);
 
   if (!token) {
     return {
@@ -73,14 +74,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const response = await api.get("/users", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  const isAllowed =
-    response.data.role === "SERVICE" || response.data.role === "ADMIN";
-
-  if (!isAllowed) {
+  if (user.role === "USER") {
     return {
       redirect: {
         destination: "/userArea",

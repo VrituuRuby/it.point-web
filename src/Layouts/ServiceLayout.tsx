@@ -14,7 +14,7 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
       <footer className="p-4 bg-dark-blue text-white flex items-center justify-center">
-        Footer
+        © Victor Velozo 2023
       </footer>
     </>
   );

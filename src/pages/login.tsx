@@ -11,10 +11,11 @@ interface FormData {
 
 const Home: NextPageWithLayout = () => {
   const { register, handleSubmit } = useForm<FormData>();
-  const { signIn } = useContext(AuthContext);
+  const { signIn, signOff } = useContext(AuthContext);
 
   async function onSubmit({ password, username }: FormData) {
     try {
+      await signOff();
       await signIn({ username, password });
     } catch (error) {
       if (isAxiosError(error)) {

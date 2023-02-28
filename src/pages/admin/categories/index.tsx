@@ -3,11 +3,9 @@ import { NextPageWithLayout } from "../../_app";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 import Layout from "@/Layouts/ServiceLayout";
-import { getAPIClient } from "@/services/axios";
 import { CategoryItem } from "./components/CategoryItem";
+import { getAPIClient } from "@/services/axios";
 import { api } from "@/services/api";
-import { randomUUID } from "crypto";
-
 interface Props {
   existingCategories: Category[];
 }
@@ -205,9 +203,10 @@ Categories.getLayout = function getLayout(page: ReactElement) {
 export default Categories;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { ["@it.point-token"]: token } = parseCookies(ctx);
+  const { ["@it.point-token"]: token, ["@it.point-user"]: userAsJson } =
+    parseCookies(ctx);
 
-  const api = getAPIClient(ctx);
+  const user = JSON.parse(userAsJson);
 
   if (!token) {
     return {
@@ -218,13 +217,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  const response = await api.get("/users", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  const isAllowed = response.data.role === "ADMIN";
-
-  if (!isAllowed) {
+  if (user.role !== "ADMIN") {
     return {
       redirect: {
         destination: "/userArea",
@@ -233,6 +226,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
+  const api = getAPIClient(ctx);
   const categoriesResponse = await api.get("/categories");
 
   return {
