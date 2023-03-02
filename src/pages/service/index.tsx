@@ -4,29 +4,23 @@ import Head from "next/head";
 import { parseCookies } from "nookies";
 
 import Layout from "@/Layouts/ServiceLayout";
-import { TicketsTable } from "../../components/TicketsTable";
 
 import { NextPageWithLayout } from "../_app";
 
-import { getTickets, Ticket } from "@/services/getTickets";
+import { Ticket } from "@/services/getTickets";
+import { TicketsTable } from "@/components/TicketsTable";
 import { getAPIClient } from "@/services/axios";
-import { isErrored } from "stream";
 
 interface FilaProps {
   tickets: Ticket[];
 }
 
-const Fila: NextPageWithLayout = () => {
+const Fila: NextPageWithLayout<FilaProps> = ({ tickets: ticketsOrder }) => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
 
   useEffect(() => {
-    async function getTicketsData() {
-      const tickets = await getTickets();
-      setTickets(tickets);
-    }
-
-    getTicketsData();
-  }, []);
+    setTickets(ticketsOrder);
+  }, [ticketsOrder]);
 
   return (
     <div className="flex flex-col flex-1 p-4 gap-4">
@@ -77,13 +71,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (user.role === "USER") {
     return {
       redirect: {
-        destination: "/home",
+        destination: "/userArea",
         permanent: false,
       },
     };
   }
 
+  const api = getAPIClient(ctx);
+
+  const ticketsResponse = await api.get("/tickets");
+
   return {
-    props: {},
+    props: {
+      tickets: ticketsResponse.data,
+    },
   };
 };
