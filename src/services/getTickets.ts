@@ -33,3 +33,11 @@ export async function getTickets(): Promise<Ticket[]> {
   const tickets = response.data;
   return tickets;
 }
+
+export async function getUserTickets(): Promise<Ticket[]> {
+  const response = await api.get("/tickets/user");
+  console.log(response.data);
+
+  const tickets = response.data;
+  return tickets;
+}

@@ -6,6 +6,7 @@ import Layout from "@/Layouts/ServiceLayout";
 import { CategoryItem } from "./components/CategoryItem";
 import { getAPIClient } from "@/services/axios";
 import { api } from "@/services/api";
+import Head from "next/head";
 interface Props {
   existingCategories: Category[];
 }
@@ -115,6 +116,9 @@ const Categories: NextPageWithLayout<Props> = ({ existingCategories }) => {
 
   return (
     <div className="flex flex-col gap-2 p-4 flex-1">
+      <Head>
+        <title>Editar categorias | it.point</title>
+      </Head>
       <h2 className="font-bold text-base-dark text-3xl">Editar categorias</h2>
       <div className="flex flex-1 gap-2">
         <div className="text-base-dark rounded-lg p-2 bg-background-light flex-1 flex flex-col gap-2 items-center">
@@ -220,7 +224,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (user.role !== "ADMIN") {
     return {
       redirect: {
-        destination: "/userArea",
+        destination: "/home",
         permanent: false,
       },
     };

@@ -8,7 +8,7 @@ export function Header() {
 
   return (
     <header className="flex flex-row px-4 py-2 bg-light-blue text-white items-center justify-between gap-4 box-border">
-      <Link href="/">
+      <Link href="/home">
         <h1 className="font-heading font-bold text-2xl">IT.POINT</h1>
       </Link>
       <div className="flex flex-row gap-2 bg-white flex-1 rounded-lg p-1 items-center">

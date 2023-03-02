@@ -2,7 +2,7 @@ import { Ticket } from "@/services/getTickets";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { MdUnfoldMore } from "react-icons/md";
-import { Status } from "./Status";
+import { Status } from "../pages/service/components/Status";
 
 const columns = [
   "Nº",

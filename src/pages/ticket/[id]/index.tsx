@@ -131,7 +131,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   let ticketResponse: AxiosResponse;
   try {
-    ticketResponse = await api.get(`/tickets/${ctx.query.id}`);
+    ticketResponse = await api.get(`/tickets/single/${ctx.query.id}`);
   } catch {
     return {
       redirect: {

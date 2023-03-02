@@ -4,7 +4,7 @@ import Head from "next/head";
 import { parseCookies } from "nookies";
 
 import Layout from "@/Layouts/ServiceLayout";
-import { TicketsTable } from "./components/TicketsTable";
+import { TicketsTable } from "../../components/TicketsTable";
 
 import { NextPageWithLayout } from "../_app";
 
@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (user.role === "USER") {
     return {
       redirect: {
-        destination: "/userArea",
+        destination: "/home",
         permanent: false,
       },
     };
