@@ -41,16 +41,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { ["@it.point-token"]: token, ["@it.point-user"]: userAsJson } =
     parseCookies(ctx);
 
-  const user = JSON.parse(userAsJson);
-
   if (!token) {
     return {
       redirect: {
-        destination: "/login",
+        destination: "/",
         permanent: false,
       },
     };
   }
+
+  const user = JSON.parse(userAsJson);
 
   return {
     props: {},

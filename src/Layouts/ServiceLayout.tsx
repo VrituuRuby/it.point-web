@@ -13,8 +13,8 @@ export default function Layout({ children }: LayoutProps) {
         <Sidebar />
         {children}
       </main>
-      <footer className="p-4 bg-dark-blue text-white flex items-center justify-center">
-        © Victor Velozo 2023
+      <footer className="p-4 bg-dark-blue text-white flex items-center justify-center font-heading font-bold">
+        ©Victor Velozo 2023
       </footer>
     </>
   );

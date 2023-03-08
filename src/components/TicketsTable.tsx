@@ -72,11 +72,14 @@ const SORTER = {
     });
   },
   "Ultima Ação": (func: Ticket[]) => {
-    return func.sort((ticketA, ticketB) => {
+    const lists = func.sort((ticketA, ticketB) => {
       if (ticketA.updated_at > ticketB.updated_at) return 1;
       if (ticketA.updated_at < ticketB.updated_at) return -1;
       return 0;
     });
+    console.log(lists);
+
+    return lists;
   },
 } as const;
 
