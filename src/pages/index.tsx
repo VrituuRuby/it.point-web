@@ -32,7 +32,7 @@ const Home: NextPageWithLayout = () => {
     <main className="w-full h-screen bg-dark-blue flex items-center justify-center p-16">
       <div className="rounded-lg bg-white w-full h-full flex overflow-hidden drop-shadow-md">
         <div className="flex-1 bg-background-light p-8 flex flex-col gap-1 items-center justify-center">
-          <h1 className="w-min font-heading font-extrabold text-6xl p-2 bg-light-blue text-white rounded-lg flex justify-center ">
+          <h1 className="font-heading font-extrabold text-6xl p-2 bg-light-blue text-white rounded-lg flex justify-center ">
             IT.POINT
           </h1>
           <p className="text-lg text-base-dark">
@@ -43,7 +43,7 @@ const Home: NextPageWithLayout = () => {
         <div className="flex-1 flex flex-col p-8 justify-center items-center">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-2 w-full max-w-[400px]"
+            className="flex flex-col gap-2 w-full max-w-[500px] justify-center items-center"
           >
             <h3 className="font-heading font-extrabold text-3xl text-dark-blue">
               Login

@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { NextPageWithLayout } from "../../_app";
 
 import Layout from "@/Layouts/ServiceLayout";
@@ -12,6 +12,8 @@ import { Note } from "./components/Note";
 import { Information } from "./components/Information";
 import { AddNote } from "./components/AddNote";
 import Head from "next/head";
+import { parseCookies } from "nookies";
+import { User } from "phosphor-react";
 
 dayjs.extend(utc);
 interface Props {
@@ -129,10 +131,24 @@ Ticket.getLayout = (page: ReactElement) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const api = getAPIClient(ctx);
 
+  const { ["@it.point-token"]: token, ["@it.point-user"]: userAsJSON } =
+    parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   let ticketResponse: AxiosResponse;
   try {
     ticketResponse = await api.get(`/tickets/single/${ctx.query.id}`);
-  } catch {
+  } catch (err: any) {
+    console.table(err);
+
     return {
       redirect: {
         destination: "/service",

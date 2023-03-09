@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (user.role === "USER") {
     return {
       redirect: {
-        destination: "/userArea",
+        destination: "/home",
         permanent: false,
       },
     };
