@@ -6,7 +6,7 @@ export function getAPIClient(ctx?: any) {
 
   let api: AxiosInstance;
 
-  if (ctx) {
+  if (process.env.DOCKER && ctx) {
     api = axios.create({
       baseURL: "http://it.point-backend:3333/api",
       timeout: 1000,

@@ -147,8 +147,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     ticketResponse = await api.get(`/tickets/single/${ctx.query.id}`);
   } catch (err: any) {
-    console.table(err);
-
     return {
       redirect: {
         destination: "/service",
