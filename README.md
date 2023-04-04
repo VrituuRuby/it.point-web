@@ -37,7 +37,7 @@ Simply run it with `docker compose up -d` in your terminal to start it in the ba
 
 ## Usage
 
-With the backend running and seeded database go to `http://localhost:3000` and you can login with these:
+With the backend running and seeded database, access `http://localhost:3000` and you can login with these:
 
 - Admin
   - user: admin
