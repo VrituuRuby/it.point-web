@@ -58,7 +58,7 @@ const Home: NextPageWithLayout = () => {
               <input
                 type="password"
                 className="bg-background-light rounded-md px-3 py-1.5 text-base-dark w-full"
-                placeholder="Usuário"
+                placeholder="Senha"
                 {...register("password", { required: true })}
               />
               <button

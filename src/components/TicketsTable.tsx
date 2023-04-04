@@ -90,9 +90,7 @@ export function TicketsTable({ tickets: ticketsInOrder }: TicketsTableProps) {
     setTickets(ticketsInOrder);
   }, [ticketsInOrder]);
 
-  let desc = false;
   function changeOrderBy(string: columnName) {
-    desc = !desc;
     const tickets = SORTER[string];
     const orderedTickets = tickets(ticketsInOrder);
     setTickets([...orderedTickets]);

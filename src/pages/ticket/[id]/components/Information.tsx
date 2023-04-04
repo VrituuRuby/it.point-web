@@ -55,11 +55,11 @@ export function Information({ ticketData, toggleAddNote }: TicketDataProps) {
       <div className="flex flex-row justify-between items-start">
         <h2 className="text-xl text-base-dark font-bold">{ticketData.title}</h2>
         <span className="text-base-light text-sm">
-          Criado em
-          {dayjs(ticketData.created_at)
+          {`Criado em ${dayjs(ticketData.created_at)
             .utcOffset(-3)
             .format("DD/MM/YYYY - HH:mm")
             .toString()}
+            `}
         </span>
       </div>
       <p className="text-base-light flex flex-col whitespace-pre-wrap">
